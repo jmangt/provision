@@ -95,4 +95,14 @@ module Provision::TaskHelper
   def fix_missing_tty_error_message(container_id)
     system("docker exec #{container_id} sed -i 's/^mesg n/tty -s \\&\\& mesg n/g' /root/.profile")
   end
+
+  # searches for environment variables that match
+  # the parameters object
+  def read_params_from_env(params, prefix = '')
+    params.each do |k, v|
+      e = "#{prefix}_#{k.upcase}"
+      params[k] = ENV[e] if ENV[e]
+    end
+    params
+  end
 end

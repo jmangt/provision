@@ -10,6 +10,9 @@ require 'pp'
 include Provision::TaskHelper
 
 params = JSON.parse(STDIN.read)
+
+puts params
+
 STDERR.puts params
 platform = params['platform']
 action = params['action']
@@ -28,6 +31,8 @@ unless node_name.nil? ^ platform.nil?
     raise 'specify only one of: node_name, platform'
   end
 end
+
+params = read_params_from_env(params, 'TERRAFORM_GCP')
 
 begin
   terraform = Provision::Terraform::GCP.new(params)
