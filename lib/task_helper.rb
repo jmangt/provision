@@ -99,9 +99,10 @@ module Provision::TaskHelper
   # searches for environment variables that match
   # the parameters object
   def read_params_from_env(params, prefix = '')
-    params.each do |k, v|
-      e = "#{prefix}_#{k.upcase}"
-      params[k] = ENV[e] if ENV[e]
+    ENV.each do |e, v|
+      if e.start_with?(prefix)
+        params[e.sub("#{prefix}_", '').downcase] = v
+      end
     end
     params
   end
